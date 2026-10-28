@@ -53,7 +53,7 @@ Edit `config/locations.json`. No code changes are needed.
 
 Invalid files are rejected at startup with a list of every problem.
 
-The shipped RGIA coordinates were supplied by the user. The Lucknow coordinates are the AAI aerodrome reference point (26°45′43″N, 80°53′00″E). Raebareli is the approximate city centre with a 30 km radius, to show flights passing overhead without repeating Lucknow airport traffic 70 km away. None are detected GPS.
+The shipped RGIA coordinates were supplied by the user. The Lucknow coordinates are the AAI aerodrome reference point (26°45′43″N, 80°53′00″E). The Delhi coordinates are the AAI aerodrome reference point for Indira Gandhi International (28°34′07″N, 77°06′44″E). Raebareli is the approximate city centre with a 30 km radius, to show flights passing overhead without repeating Lucknow airport traffic 70 km away. None are detected GPS.
 
 ## Data sources
 

@@ -59,6 +59,14 @@ describe("config", () => {
         longitude: 81.2336,
         radiusKm: 30,
         enabled: true
+      },
+      {
+        id: "delhi",
+        name: "Indira Gandhi International Airport, Delhi",
+        latitude: 28.568611,
+        longitude: 77.112222,
+        radiusKm: 100,
+        enabled: true
       }
     ]);
   });
