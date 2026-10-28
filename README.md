@@ -1,6 +1,6 @@
 # Nearby Flights
 
-A command-line tracker that shows airborne aircraft around each of your registered locations, using live ADS-B data from [ADSB.lol](https://adsb.lol). Each location gets its own section, nearest aircraft first.
+A command-line tracker and iPhone app that show airborne aircraft around each of your registered locations, using live ADS-B data from [ADSB.lol](https://adsb.lol). Each location gets its own section, nearest aircraft first.
 
 Positions are fetched on startup and then every 5 minutes. These are periodic snapshots, not continuous tracking: aircraft passing between polls can be missed, and an empty result means the provider returned no aircraft, not necessarily that the airspace is empty.
 
@@ -81,13 +81,45 @@ Not yet included, because no verified source exists: flight purpose (scheduled/p
 - Requests time out after 10 s and are retried with backoff. HTTP 429 `Retry-After` is honoured and shared across requests to that provider.
 - Polling cycles never overlap, and missed cycles (for example after sleep) are not replayed in a burst.
 
+## iPhone app
+
+`apps/mobile` is a React Native (Expo) app with the same data and polling as the CLI: one card per location, nearest aircraft first, refreshed every 5 minutes, on returning to the app, and on pull-to-refresh. Tap an aircraft for airports, heading, speed and age of the position. The locations button turns locations on or off; the choice is saved on the phone.
+
+The phone does not download tar1090-db (about 40 MB), so registration and model come from the ADSB.lol feed and ADSBdb. Owner/operator is shown less often than in the CLI.
+
+The locations in `config/locations.json` are bundled when the app is built. Rebuild after editing them.
+
+### Install on your iPhone with Xcode
+
+Needs a Mac with Xcode and its iOS platform (Xcode > Settings > Components), and an Apple ID added under Xcode > Settings > Accounts. A free Apple ID works; the app then stops opening after 7 days and has to be installed again from Xcode. A paid developer account extends that to a year.
+
+1. Generate the native project (it is not committed; rerun after changing `app.json` or native dependencies):
+
+   ```sh
+   npm install
+   cd apps/mobile
+   npx expo prebuild -p ios
+   open ios/NearbyFlights.xcworkspace
+   ```
+
+2. In Xcode, select the **NearbyFlights** target, then **Signing & Capabilities**: tick _Automatically manage signing_ and choose your **Personal Team**. If Xcode reports the bundle identifier is taken, change `com.pranjalagni.nearbyflights` to something unique (in `app.json` too, so the next prebuild keeps it).
+3. **Product > Scheme > Edit Scheme > Run > Build Configuration: Release.** Release builds embed the JavaScript, so the app runs without a development server.
+4. On the iPhone, turn on **Settings > Privacy & Security > Developer Mode** (the phone restarts). Connect it by cable and tap _Trust_.
+5. Pick the iPhone as the run destination and press **Run** (⌘R).
+6. The first launch is blocked until you trust the developer: **Settings > General > VPN & Device Management**, select your Apple ID, then _Trust_.
+
+After the first setup, `npx expo run:ios --configuration Release --device` builds and installs from the terminal.
+
 ## Development
 
 ```sh
 npm run typecheck   # strict TypeScript, every workspace
 npm test            # node:test, fixture-based, no network
+npm run lint -w @watch-flights/mobile
 npm run format      # Prettier
 ```
+
+Run the app in the iOS Simulator with `npm run ios -w @watch-flights/mobile`.
 
 The repo is an npm workspace:
 
@@ -95,6 +127,7 @@ The repo is an npm workspace:
 | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | `packages/core` | Providers, enrichment, polling and formatting. Web-standard APIs only (`fetch`, `TextDecoder`), so the same code runs on Node and React Native. |
 | `apps/cli`      | The terminal UI, plus the Node-only parts: config file loading and the on-disk tar1090-db cache.                                                |
+| `apps/mobile`   | The iPhone app.                                                                                                                                 |
 | `config`        | The shared location registry.                                                                                                                   |
 
 Tests use `packages/core/test/fixtures/adsb.json` (a real ADSB.lol response near RGIA), a sample of tar1090-db rows, ADSBdb responses, mocked `fetch` and a controllable clock.
