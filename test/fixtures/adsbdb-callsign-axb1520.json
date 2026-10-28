@@ -1,0 +1,39 @@
+{
+    "response": {
+        "flightroute": {
+            "callsign": "AXB1520",
+            "callsign_icao": "AXB1520",
+            "callsign_iata": "IX1520",
+            "airline": {
+                "name": "Air India Express",
+                "icao": "AXB",
+                "iata": "IX",
+                "country": "India",
+                "country_iso": "IN",
+                "callsign": "EXPRESS INDIA"
+            },
+            "origin": {
+                "country_iso_name": "IN",
+                "country_name": "India",
+                "elevation": 162,
+                "iata_code": "GAU",
+                "icao_code": "VEGT",
+                "latitude": 26.1061,
+                "longitude": 91.5859,
+                "municipality": "Guwahati",
+                "name": "Lokpriya Gopinath Bordoloi International Airport"
+            },
+            "destination": {
+                "country_iso_name": "IN",
+                "country_name": "India",
+                "elevation": 16,
+                "iata_code": "CCU",
+                "icao_code": "VECC",
+                "latitude": 22.6547,
+                "longitude": 88.4467,
+                "municipality": "Kolkata",
+                "name": "Netaji Subhash Chandra Bose International Airport"
+            }
+        }
+    }
+}
