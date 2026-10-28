@@ -89,6 +89,72 @@ describe("PollScheduler", () => {
     await scheduler.stop();
   });
 
+  it("refreshNow() polls immediately and restarts the interval from it", async () => {
+    const { clock, scheduler, starts, stop } = setup(1_000);
+    const t0 = clock.now();
+    scheduler.start();
+    await clock.advance(120_000);
+    const refreshed = scheduler.refreshNow();
+    await clock.advance(1_000);
+    await refreshed;
+    assert.deepEqual(starts, [t0, t0 + 120_000]);
+    assert.equal(scheduler.nextRunAtMs, t0 + 420_000);
+    await clock.advance(299_000);
+    assert.deepEqual(starts, [t0, t0 + 120_000, t0 + 420_000]);
+    await stop();
+  });
+
+  it("refreshNow() joins a running cycle instead of overlapping it", async () => {
+    const { clock, scheduler, starts, maxActive, stop } = setup(5_000);
+    scheduler.start();
+    await clock.advance(0);
+    let settled = false;
+    const refreshed = scheduler.refreshNow().then(() => (settled = true));
+    await clock.advance(4_000);
+    assert.equal(settled, false);
+    await clock.advance(1_000);
+    await refreshed;
+    assert.equal(starts.length, 1);
+    assert.equal(maxActive(), 1);
+    await stop();
+  });
+
+  it("refreshNow() does nothing once stopped", async () => {
+    const { clock, scheduler, starts } = setup();
+    scheduler.start();
+    await clock.advance(0);
+    await scheduler.stop();
+    await scheduler.refreshNow();
+    assert.equal(starts.length, 1);
+    assert.equal(clock.pendingTimers, 0);
+  });
+
+  it("wake() polls at once when the due time passed while suspended", async () => {
+    const { clock, scheduler, starts } = setup();
+    scheduler.start();
+    await clock.advance(60_000);
+    clock.sleepMachine(30 * 60_000);
+    scheduler.wake();
+    await clock.advance(0);
+    assert.equal(starts.length, 2);
+    assert.equal(starts[1], clock.now());
+    await scheduler.stop();
+  });
+
+  it("wake() before the due time keeps the schedule", async () => {
+    const { clock, scheduler, starts } = setup();
+    const t0 = clock.now();
+    scheduler.start();
+    await clock.advance(60_000);
+    scheduler.wake();
+    await clock.advance(0);
+    assert.equal(starts.length, 1);
+    assert.equal(scheduler.nextRunAtMs, t0 + POLL_INTERVAL_MS);
+    await clock.advance(240_000);
+    assert.equal(starts.length, 2);
+    await scheduler.stop();
+  });
+
   it("keeps polling after a failed cycle", async () => {
     const clock = new FakeClock();
     const errors: unknown[] = [];

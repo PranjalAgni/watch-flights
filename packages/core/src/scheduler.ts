@@ -51,6 +51,30 @@ export class PollScheduler {
     await this.#current;
   }
 
+  /**
+   * Runs a cycle now (for example on pull-to-refresh) and restarts the
+   * interval from it. Joins the running cycle instead of overlapping it.
+   */
+  refreshNow(): Promise<void> {
+    if (this.#stopped) return Promise.resolve();
+    if (this.#current === null) {
+      if (this.#timer !== null) this.options.clock.clearTimeout(this.#timer);
+      this.#runCycle();
+    }
+    return this.#current ?? Promise.resolve();
+  }
+
+  /**
+   * Re-checks the due time against the wall clock now instead of at the next
+   * periodic check, for example when a suspended app returns to the
+   * foreground.
+   */
+  wake(): void {
+    if (this.#stopped || this.#current !== null) return;
+    if (this.#timer !== null) this.options.clock.clearTimeout(this.#timer);
+    this.#arm();
+  }
+
   #runCycle(): void {
     const { clock, intervalMs, run, onError, onScheduled } = this.options;
     this.#timer = null;
