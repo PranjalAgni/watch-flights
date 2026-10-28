@@ -1,6 +1,5 @@
-import type { HttpClient } from "../http.js";
 import type { Airport, FlightRoute } from "../types.js";
-import { RateGate } from "../http.js";
+import { decodeUtf8, type HttpClient, RateGate } from "../http.js";
 import { ProviderSchemaError } from "./errors.js";
 
 export const ADSBDB_BASE_URL = "https://api.adsbdb.com";
@@ -140,7 +139,7 @@ export class AdsbdbClient {
     try {
       return {
         status: response.status,
-        body: JSON.parse(response.body.toString("utf8"))
+        body: JSON.parse(decodeUtf8(response.body))
       };
     } catch {
       throw new ProviderSchemaError(

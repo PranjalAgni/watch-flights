@@ -1,5 +1,5 @@
-import { compassPoint } from "../geo.js";
-import type { Altitude } from "../types.js";
+import { compassPoint } from "./geo.js";
+import type { Altitude } from "./types.js";
 
 export const UNKNOWN = "unknown";
 

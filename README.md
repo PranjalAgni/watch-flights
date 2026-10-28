@@ -57,12 +57,12 @@ The shipped RGIA coordinates were supplied by the user. The Lucknow coordinates 
 
 ## Data sources
 
-| Source                                                | Used for                                                                                                               |
-| ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| ADSB.lol `/v2/point`                                  | Positions, altitude, ground speed, track, distance and bearing. No key needed; rate limits are dynamic.                |
-| [tar1090-db](https://github.com/wiedehopf/tar1090-db) | Registration, type and model. Cached in `.cache/`, revalidated weekly. The last valid copy is kept if a refresh fails. |
-| ADSBdb `/v0/aircraft`                                 | Registered owner, when known. Looked up once per aircraft (hits and misses cached for 24 h).                           |
-| ADSBdb `/v0/callsign`                                 | Origin and destination airports, looked up by callsign (cached for 6 h).                                               |
+| Source                                                | Used for                                                                                                                        |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| ADSB.lol `/v2/point`                                  | Positions, altitude, ground speed, track, distance and bearing. No key needed; rate limits are dynamic.                         |
+| [tar1090-db](https://github.com/wiedehopf/tar1090-db) | Registration, type and model. Cached in `apps/cli/.cache/`, revalidated weekly. The last valid copy is kept if a refresh fails. |
+| ADSBdb `/v0/aircraft`                                 | Registered owner, when known. Looked up once per aircraft (hits and misses cached for 24 h).                                    |
+| ADSBdb `/v0/callsign`                                 | Origin and destination airports, looked up by callsign (cached for 6 h).                                                        |
 
 Owner and operator are kept distinct: the table shows ADSBdb's _registered owner_ when available, otherwise tar1090-db's combined owner/operator label. Each resolved field records its source, and whether a second source agrees.
 
@@ -84,8 +84,17 @@ Not yet included, because no verified source exists: flight purpose (scheduled/p
 ## Development
 
 ```sh
-npm run typecheck   # strict TypeScript, src and tests
+npm run typecheck   # strict TypeScript, every workspace
 npm test            # node:test, fixture-based, no network
+npm run format      # Prettier
 ```
 
-Tests use `test/fixtures/adsb.json` (a real ADSB.lol response near RGIA), a sample of tar1090-db rows, ADSBdb responses, mocked `fetch` and a controllable clock.
+The repo is an npm workspace:
+
+| Path            | Contents                                                                                                                                        |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `packages/core` | Providers, enrichment, polling and formatting. Web-standard APIs only (`fetch`, `TextDecoder`), so the same code runs on Node and React Native. |
+| `apps/cli`      | The terminal UI, plus the Node-only parts: config file loading and the on-disk tar1090-db cache.                                                |
+| `config`        | The shared location registry.                                                                                                                   |
+
+Tests use `packages/core/test/fixtures/adsb.json` (a real ADSB.lol response near RGIA), a sample of tar1090-db rows, ADSBdb responses, mocked `fetch` and a controllable clock.

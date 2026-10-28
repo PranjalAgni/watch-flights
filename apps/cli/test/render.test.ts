@@ -1,7 +1,23 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { type AircraftDbStatus, parseAircraftCsv } from "../src/aircraft-db.js";
-import { formatDirection } from "../src/display/format.js";
+import {
+  type FlightRoute,
+  formatDirection,
+  type Location,
+  type LocationState,
+  MetadataService,
+  normalizeSnapshot,
+  parseAdsbdbCallsignResponse,
+  parseAdsbLolResponse,
+  parseAircraftCsv,
+  type Snapshot
+} from "@watch-flights/core";
+import {
+  FakeClock,
+  readFixture,
+  readJsonFixture
+} from "@watch-flights/core/testing";
+import type { AircraftDbStatus } from "../src/aircraft-db-manager.js";
 import {
   renderFrame,
   type RenderInput,
@@ -12,18 +28,6 @@ import {
   stripAnsi,
   visibleLength
 } from "../src/display/style.js";
-import { MetadataService } from "../src/metadata.js";
-import { normalizeSnapshot } from "../src/normalize.js";
-import { parseAdsbdbCallsignResponse } from "../src/providers/adsbdb.js";
-import { parseAdsbLolResponse } from "../src/providers/adsblol.js";
-import type {
-  FlightRoute,
-  Location,
-  LocationState,
-  Snapshot
-} from "../src/types.js";
-import { FakeClock } from "./helpers/fake-clock.js";
-import { readFixture, readJsonFixture } from "./helpers/fake-fetch.js";
 
 const RGIA: Location = {
   id: "rgia",

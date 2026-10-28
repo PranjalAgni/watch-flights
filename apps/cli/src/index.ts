@@ -2,23 +2,29 @@
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
-import { AircraftDbManager } from "./aircraft-db.js";
-import { sleep, systemClock } from "./clock.js";
-import { ConfigError, loadConfig } from "./config.js";
+import {
+  AdsbdbClient,
+  AdsbLolClient,
+  ConfigError,
+  formatDateTime,
+  FlightWatcher,
+  HttpClient,
+  MetadataService,
+  POLL_INTERVAL_MS,
+  PollScheduler,
+  sleep,
+  systemClock
+} from "@watch-flights/core";
+import { AircraftDbManager } from "./aircraft-db-manager.js";
+import { loadConfig } from "./config-file.js";
 import { MIN_WIDTH, renderFrame, type RenderInput } from "./display/render.js";
 import { shouldUseColor } from "./display/style.js";
 import { InteractiveScreen } from "./display/terminal.js";
-import { formatDateTime } from "./display/format.js";
-import { HttpClient } from "./http.js";
-import { MetadataService } from "./metadata.js";
-import { AdsbdbClient } from "./providers/adsbdb.js";
-import { AdsbLolClient } from "./providers/adsblol.js";
-import { POLL_INTERVAL_MS, PollScheduler } from "./scheduler.js";
-import { FlightWatcher } from "./watcher.js";
 
-const PROJECT_ROOT = fileURLToPath(new URL("..", import.meta.url));
-const DEFAULT_CONFIG = resolve(PROJECT_ROOT, "config/locations.json");
-const CACHE_DIR = resolve(PROJECT_ROOT, ".cache");
+// Resolves to apps/cli both from src/ (tsx) and from the bundled dist/.
+const APP_ROOT = fileURLToPath(new URL("..", import.meta.url));
+const DEFAULT_CONFIG = resolve(APP_ROOT, "../../config/locations.json");
+const CACHE_DIR = resolve(APP_ROOT, ".cache");
 /**
  * How long redirected/--once output waits for owner lookups before printing
  * anyway.

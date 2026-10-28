@@ -1,32 +1,33 @@
 {
   "name": "watch-flights",
   "version": "1.0.0",
-  "description": "Command-line tracker for live ADS-B aircraft around configured locations",
+  "private": true,
+  "description": "Live ADS-B aircraft around configured locations, as a terminal CLI and an iOS app",
   "license": "ISC",
   "type": "module",
-  "bin": {
-    "nearby-flights": "dist/index.js"
-  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
   "engines": {
     "node": ">=22"
   },
   "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "typecheck": "tsc --noEmit -p tsconfig.json",
-    "build": "tsc -p tsconfig.build.json",
-    "start": "node dist/index.js",
-    "test": "node --import tsx --test --test-timeout=10000 \"test/**/*.test.ts\"",
+    "dev": "npm run dev -w @watch-flights/cli",
+    "build": "npm run build -w @watch-flights/cli",
+    "start": "npm start -w @watch-flights/cli",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm test --workspaces --if-present",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
-  },
-  "dependencies": {
-    "cli-table3": "^0.6.5",
-    "string-width": "^4.2.3"
   },
   "devDependencies": {
     "@types/node": "^26.6.5",
     "prettier": "3.9.10",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true
   }
 }

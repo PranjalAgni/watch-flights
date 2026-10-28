@@ -3,4 +3,4 @@ dist/
 node_modules/
 package-lock.json
 # Recorded provider responses: keep them byte-for-byte as captured.
-test/fixtures/
+packages/core/test/fixtures/

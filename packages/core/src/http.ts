@@ -46,7 +46,7 @@ export interface RequestOptions {
 export interface HttpResponse {
   status: number;
   headers: Headers;
-  body: Buffer;
+  body: Uint8Array;
 }
 
 const RETRYABLE_STATUSES = new Set([500, 502, 503, 504]);
@@ -167,7 +167,7 @@ export class HttpClient {
         signal: controller.signal,
         headers: { "user-agent": this.#userAgent, ...options.headers }
       });
-      const body = Buffer.from(await res.arrayBuffer());
+      const body = new Uint8Array(await res.arrayBuffer());
       return { status: res.status, headers: res.headers, body };
     } catch (error) {
       if (timedOut)
@@ -219,4 +219,10 @@ export function describeError(error: unknown): string {
   if (error instanceof HttpError) return error.message;
   if (error instanceof Error) return error.message;
   return String(error);
+}
+
+const utf8 = new TextDecoder("utf-8");
+
+export function decodeUtf8(bytes: Uint8Array): string {
+  return utf8.decode(bytes);
 }

@@ -1,5 +1,5 @@
 import { kmToNm } from "../geo.js";
-import { type HttpClient, RateGate } from "../http.js";
+import { decodeUtf8, type HttpClient, RateGate } from "../http.js";
 import type { Location } from "../types.js";
 import { ProviderSchemaError } from "./errors.js";
 
@@ -67,7 +67,7 @@ export class AdsbLolClient {
     });
     let body: unknown;
     try {
-      body = JSON.parse(response.body.toString("utf8"));
+      body = JSON.parse(decodeUtf8(response.body));
     } catch {
       throw new ProviderSchemaError("ADSB.lol", "body is not JSON");
     }

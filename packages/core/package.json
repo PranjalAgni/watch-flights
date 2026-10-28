@@ -1,0 +1,17 @@
+{
+  "name": "@watch-flights/core",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Platform-neutral flight tracking: providers, enrichment, polling and formatting",
+  "license": "ISC",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts",
+    "./testing": "./test/helpers/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.test.json",
+    "test": "node --import tsx --test --test-timeout=10000 \"test/**/*.test.ts\""
+  }
+}

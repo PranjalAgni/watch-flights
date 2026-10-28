@@ -1,13 +1,8 @@
 import Table from "cli-table3";
-import type { AircraftDbStatus } from "../aircraft-db.js";
-import type {
-  AircraftMetadata,
-  AircraftPosition,
-  Airport,
-  LocationState,
-  RouteInfo
-} from "../types.js";
 import {
+  type AircraftMetadata,
+  type AircraftPosition,
+  type Airport,
   formatAgo,
   formatAltitude,
   formatCountdown,
@@ -20,9 +15,12 @@ import {
   formatShortDate,
   formatSpeed,
   formatTime,
+  type LocationState,
+  type RouteInfo,
   type TimeFormat,
   UNKNOWN
-} from "./format.js";
+} from "@watch-flights/core";
+import type { AircraftDbStatus } from "../aircraft-db-manager.js";
 import {
   createStyle,
   stripAnsi,
