@@ -1,0 +1,30 @@
+{
+  "timeZone": "Asia/Kolkata",
+  "timeZoneLabel": "IST",
+  "locations": [
+    {
+      "id": "rgia",
+      "name": "RGIA, Hyderabad",
+      "latitude": 17.239943874504426,
+      "longitude": 78.42947104117285,
+      "radiusKm": 100,
+      "enabled": true
+    },
+    {
+      "id": "lucknow",
+      "name": "Chaudhary Charan Singh International Airport, Lucknow",
+      "latitude": 26.761944,
+      "longitude": 80.883333,
+      "radiusKm": 100,
+      "enabled": true
+    },
+    {
+      "id": "raebareli",
+      "name": "Raebareli",
+      "latitude": 26.2309,
+      "longitude": 81.2336,
+      "radiusKm": 30,
+      "enabled": true
+    }
+  ]
+}
