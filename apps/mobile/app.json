@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "Nearby Flights",
+    "slug": "nearby-flights",
+    "version": "1.0.0",
+    "platforms": ["ios"],
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#0A0E13",
+    "ios": {
+      "bundleIdentifier": "com.pranjalagni.nearbyflights",
+      "supportsTablet": false,
+      "config": { "usesNonExemptEncryption": false }
+    },
+    "plugins": [
+      "expo-sqlite",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#0A0E13",
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 120
+        }
+      ]
+    ]
+  }
+}
