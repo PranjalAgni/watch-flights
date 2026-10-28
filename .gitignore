@@ -4,3 +4,6 @@ dist/
 .env.*
 !.env.example
 .cache/
+.expo/
+apps/mobile/ios/
+apps/mobile/android/
