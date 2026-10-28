@@ -1,0 +1,32 @@
+{
+  "name": "watch-flights",
+  "version": "1.0.0",
+  "description": "Command-line tracker for live ADS-B aircraft around configured locations",
+  "license": "ISC",
+  "type": "module",
+  "bin": {
+    "nearby-flights": "dist/index.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/index.js",
+    "test": "node --import tsx --test --test-timeout=10000 \"test/**/*.test.ts\"",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "dependencies": {
+    "cli-table3": "^0.6.5",
+    "string-width": "^4.2.3"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "prettier": "3.9.10",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}
